@@ -1,11 +1,14 @@
+<%= link_to '&lArr; list', '/book' %>
+
+<h2>Edit</h2>
+
 <% form_for :book, :url => { :action => "update", :id => @book.id } do |book_form| %>
-  <p>----------------------</p>
 
   <p>
     book.title: <%= book_form.text_field :title %>
   </p>
 
-  <p>----------------------</p>
+  <div>----------------------</div>
 
   <p>
     <% book_form.fields_for :author_attributes, @book.author do |author_form| %>
@@ -13,15 +16,14 @@
     <% end %>
   </p>
 
-  <p>----------------------</p>
+  <div>----------------------</div>
 
   <p>
     <% unless @book.pages.empty? %>
       <% book_form.fields_for :pages_attributes do |pages_form| %>
-        book.pages:
         <% @book.pages.each_with_index do |page, index| %>
           <p>
-            [<%= index %>]<br />
+            book.pages[<%= index %>]:<br />
             <% pages_form.fields_for :"#{page.id}", page do |page_fields| %>
               <%= page_fields.text_area :text, :size => '60x4'%>
             <% end %>
@@ -31,18 +33,17 @@
     <% end %>
   </p>
 
-  <p>----------</p>
-
   <p>
-    [new]<br />
-    <% book_form.fields_for :pages_attributes do |pages_form| %>
-      <% pages_form.fields_for :new_page do |page_fields| %>
-        <%= page_fields.text_area :text, :size => '60x4'%>
+    <a href="javascript:void(0)" onclick="document.getElementById('new_page').style.display = 'block'; this.style.display = 'none';">new page</a>
+    <div id="new_page" style="display: none;">
+      book.pages[new_page]:<br />
+      <% book_form.fields_for :pages_attributes do |pages_form| %>
+        <% pages_form.fields_for :new_page do |page_fields| %>
+          <%= page_fields.text_area :text, :size => '60x4'%>
+        <% end %>
       <% end %>
-    <% end %>
+    </div>
   </p>
-
-  <p>----------------------</p>
 
   <%= book_form.submit %>
 <% end %>

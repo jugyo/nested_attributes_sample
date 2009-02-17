@@ -3,5 +3,5 @@ class Book < ActiveRecord::Base
   has_many :pages
 
   accepts_nested_attributes_for :author
-  accepts_nested_attributes_for :pages, :allow_destroy => true
+  accepts_nested_attributes_for :pages, :allow_destroy => true, :reject_if => proc{|attrs| attrs['text'].blank?}
 end
